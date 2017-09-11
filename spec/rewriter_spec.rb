@@ -1,21 +1,22 @@
 require 'spec_helper'
 
 describe CssRewrite::Rewriter do
-  describe '.create' do
-    it 'creates a call rewriter from the given args' do
-      block = -> {}
-      rewriter = described_class.create(&block)
-      expect(rewriter).to be_a(CssRewrite::CallRewriter)
-      expect(rewriter.replacement_block).to eq(block)
+  let(:rewriter) { described_class.new(/application\.css$/, &block) }
+  let(:block) { -> (url) { url.gsub(/\.png$/, '.foo') } }
+
+  describe '#matches?' do
+    it "returns false if the filename doesn't match" do
+      expect(rewriter.matches?('something.js')).to eq(false)
     end
 
-    it 'creates a regex rewriter' do
-      block = -> {}
-      regex = /re/
-      rewriter = described_class.create(regex, &block)
-      expect(rewriter).to be_a(CssRewrite::RegexRewriter)
-      expect(rewriter.replacement_block).to eq(block)
-      expect(rewriter.regex).to eq(regex)
+    it 'returns true if the filename matches' do
+      expect(rewriter.matches?('application.css')).to eq(true)
+    end
+  end
+
+  describe '#rewrite' do
+    it 'uses the replacement block to modify the url' do
+      expect(rewriter.rewrite('path/to/image.png')).to eq('path/to/image.foo')
     end
   end
 end

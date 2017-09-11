@@ -1,13 +1,27 @@
 module CssRewrite
   class Rewriter
-    REWRITERS = [CssRewrite::RegexRewriter, CssRewrite::CallRewriter]
+    attr_reader :file_filter, :replacement_block
 
-    def self.create(*args, &block)
-      rewriter = REWRITERS.find do |rewriter|
-        rewriter.applies_to?(*args, &block)
+    def initialize(file_filter, &block)
+      @file_filter = file_filter
+      @replacement_block = block
+    end
+
+    def matches?(filename)
+      case file_filter
+        when String
+          file_filter == filename
+        when Regexp
+          !!(file_filter =~ filename)
+        else
+          if file_filter.respond_to?(:call)
+            file_filter.call(filename)
+          end
       end
+    end
 
-      rewriter.new(*args, &block)
+    def rewrite(url)
+      replacement_block.call(url)
     end
   end
 end

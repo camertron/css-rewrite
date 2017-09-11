@@ -8,7 +8,7 @@ describe 'Asset precompile' do
 
   before do
     CssRewrite.configure do |config|
-      config.rewrite do |url, filename|
+      config.rewrite(/application\.css$/) do |url|
         url.chomp(File.extname(url)) + '.foo'
       end
     end

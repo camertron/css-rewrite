@@ -10,8 +10,8 @@ module CssRewrite
 
     attr_reader :rewriters
 
-    def rewrite(*args, &block)
-      rewriters << Rewriter.create(*args, &block)
+    def rewrite(file_filter, &block)
+      rewriters << Rewriter.new(file_filter, &block)
     end
 
     private

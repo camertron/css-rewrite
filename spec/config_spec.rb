@@ -24,14 +24,10 @@ describe CssRewrite::Config do
     subject { described_class.instance }
 
     describe '#rewrite' do
-      it 'adds a call rewriter to the list of rewriters' do
-        expect { subject.rewrite {} }.to change { subject.rewriters.size }.by(1)
-        expect(subject.rewriters.first).to be_a(CssRewrite::CallRewriter)
-      end
-
-      it 'adds a regex rewriter to the list of rewriters' do
-        expect { subject.rewrite(/re/) {} }.to change { subject.rewriters.size }.by(1)
-        expect(subject.rewriters.first).to be_a(CssRewrite::RegexRewriter)
+      it 'adds a rewriter to the list of rewriters' do
+        expect { subject.rewrite('application.css') {} }.to(
+          change { subject.rewriters.size }.by(1)
+        )
       end
     end
   end

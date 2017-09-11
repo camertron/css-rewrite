@@ -4,11 +4,19 @@ module CssRewrite
   class Postprocessor
     class << self
       def run(filename, source, context)
+        rewriters = find_rewriters(filename)
+        return source if rewriters.empty?
         tree = Crass.parse(source, preserve_comments: true)
 
         replace_urls(tree) do |url|
-          rewriter = Config.instance.rewriters.find { |re| re.matches?(url) }
-          rewriter ? rewriter.rewrite(url, filename) : url
+          rewritten_url = nil
+
+          rewriters.each do |rewriter|
+            rewritten_url = rewriter.rewrite(url)
+            break if rewritten_url
+          end
+
+          rewritten_url || url
         end
 
         Crass::Parser.stringify(tree)
@@ -24,6 +32,12 @@ module CssRewrite
       end
 
       private
+
+      def find_rewriters(filename)
+        Config.instance.rewriters.select do |re|
+          re.matches?(filename)
+        end
+      end
 
       def replace_urls(root, &block)
         return unless root
