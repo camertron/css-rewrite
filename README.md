@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/camertron/css-rewrite.svg?branch=master)](https://travis-ci.org/camertron/css-rewrite)
+
 ## css-rewrite
 Rewrite URLs in your 3rd-party CSS files using the asset pipeline.
 
