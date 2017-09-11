@@ -31,7 +31,7 @@ you want this:
 
 Every time the author of the CSS library publishes a new version, you have to pull it down and do the hunt-and-replace thing all over again. How tedious.
 
-That's where css-rewrite comes in. Rather than hunting for references to `url` by hand, css-rewrite adds a post-processor to the asset pipeline that finds and replaces `url`s for you. Whenever the file is served or precompiled, the URLs will magically point at the correct asset paths. No manual hunting or replacing necessary.
+That's where css-rewrite comes in. Rather than hunting for and converting URLs by hand, css-rewrite adds a post-processor to the asset pipeline that finds and replaces them for you. Whenever the file is served or precompiled, the URLs will point to the correct asset paths. No manual hunting or replacing necessary.
 
 ### Ok I'm listening. How does it work?
 
